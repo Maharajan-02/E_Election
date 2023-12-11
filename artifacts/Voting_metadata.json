@@ -1,0 +1,517 @@
+{
+	"compiler": {
+		"version": "0.8.18+commit.87f61d96"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "Approved",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "Rejected_or_Banned",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"name": "Request_For_Registration",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"name": "candidate_registration",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"name": "voter_registration",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_voter_name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_voter_address",
+						"type": "string"
+					},
+					{
+						"internalType": "uint8",
+						"name": "_voter_age",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "_voter_aadhaar_number",
+						"type": "string"
+					}
+				],
+				"name": "add_voter",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_candidate_id",
+						"type": "uint256"
+					}
+				],
+				"name": "approve_or_unBan_candidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_voter_id",
+						"type": "uint256"
+					}
+				],
+				"name": "approve_or_unBan_voter",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_voter_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "enum Voting.DelegatedRelationship",
+						"name": "_relationship",
+						"type": "uint8"
+					}
+				],
+				"name": "delegate_my_vote",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "endElection",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_candidate_id",
+						"type": "uint256"
+					}
+				],
+				"name": "get_candidate_detail",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "candidate_id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "candidate_name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "candidate_address",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "candidate_age",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "candidate_promise",
+								"type": "string"
+							}
+						],
+						"internalType": "struct Voting.Candidate_List",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_candidate_id",
+						"type": "uint256"
+					}
+				],
+				"name": "get_candidate_eligibility",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "get_candidate_list",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "candidate_id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "candidate_name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "candidate_address",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "candidate_age",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "candidate_promise",
+								"type": "string"
+							}
+						],
+						"internalType": "struct Voting.Candidate_List[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_candidate_id",
+						"type": "uint256"
+					}
+				],
+				"name": "get_candidate_result",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "get_election_result",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_voter_id",
+						"type": "uint256"
+					}
+				],
+				"name": "get_voter_detail",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "voter_id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "voter_name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "voter_address",
+								"type": "string"
+							},
+							{
+								"internalType": "uint8",
+								"name": "voter_age",
+								"type": "uint8"
+							},
+							{
+								"internalType": "string",
+								"name": "voter_aadhaar_number",
+								"type": "string"
+							}
+						],
+						"internalType": "struct Voting.Voters_List",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_voter_id",
+						"type": "uint256"
+					}
+				],
+				"name": "get_voter_eligibility",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_candidate_id",
+						"type": "uint256"
+					}
+				],
+				"name": "registerVote",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_candidate_name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_candidate_address",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_candidate_age",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_candidate_promise",
+						"type": "string"
+					}
+				],
+				"name": "register_candidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_delegated_voter_id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_candidate_id",
+						"type": "uint256"
+					}
+				],
+				"name": "register_delegated_vote",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_candidate_id",
+						"type": "uint256"
+					}
+				],
+				"name": "reject_or_ban_candidate",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_voter_id",
+						"type": "uint256"
+					}
+				],
+				"name": "reject_or_ban_voter",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "startElection",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"BlockChainElection.sol": "Voting"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"BlockChainElection.sol": {
+			"keccak256": "0xbd68f1fb27903e163674d9adc651e4684c291469024437e41d5d81038b3e7e32",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://6b7e7e6849cf98d4be3bc193cf4a8e50902d73f01cba674f0746c7f02a65c829",
+				"dweb:/ipfs/QmNh1uJcWcmnLBAUBTjHqnPm7gDzhFTP6BNBGYVdxiAD89"
+			]
+		}
+	},
+	"version": 1
+}
