@@ -490,7 +490,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"Contracts/BlockChainElection.sol": "Voting"
+			"BlockChainElection.sol": "Voting"
 		},
 		"evmVersion": "paris",
 		"libraries": {},
@@ -504,12 +504,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"Contracts/BlockChainElection.sol": {
-			"keccak256": "0x42308a5225b0affdc770348ffaf9884521050c09ee40a17b1055b468a12dbd14",
+		"BlockChainElection.sol": {
+			"keccak256": "0xbd68f1fb27903e163674d9adc651e4684c291469024437e41d5d81038b3e7e32",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://66f50cf1ee37fd2c5593f3e2da1e2b54a8847561891be546a590f584cb2486a1",
-				"dweb:/ipfs/QmaAkb969FZ53kpVbbvJvNHkRsa9xAueJp9HsW3q1kabMk"
+				"bzz-raw://6b7e7e6849cf98d4be3bc193cf4a8e50902d73f01cba674f0746c7f02a65c829",
+				"dweb:/ipfs/QmNh1uJcWcmnLBAUBTjHqnPm7gDzhFTP6BNBGYVdxiAD89"
 			]
 		}
 	},
