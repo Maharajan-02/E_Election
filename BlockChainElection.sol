@@ -4,6 +4,8 @@
 
 pragma solidity > 0.8.0;
 
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
 contract Voting{
 
     uint total_active_voters;
@@ -64,6 +66,10 @@ contract Voting{
         bool can_vote;
     }
 
+    struct Vote_List{
+        uint voted_id;
+    }
+
      enum DelegatedRelationship {Parent, Spouse, Child, Sibling, Friend, Guardian}
 
     mapping (uint => Voters_List) voters;
@@ -75,8 +81,10 @@ contract Voting{
     mapping (uint => Voter_Eligible) voterEligible;
     mapping (uint => Candidate_Eligible) candidateEligible;
     mapping (uint => Delegated_Votes[]) delegatedVotes;
+    mapping (uint => Vote_List) vote_list;
 
     Candidate_List[] private candidateList;
+    Voters_List[] private votersList;
 
     constructor(){
         election_commission = msg.sender;
@@ -125,6 +133,16 @@ contract Voting{
         require(!election_ended, "Election is not in progress.");
         _;
     }
+
+    modifier validId(uint id, bool is_candidate){
+        if(is_candidate){
+            require(id > 0 && id < id_candidate, "Invalid Candidate Id");
+        }
+        else{
+            require(id > 0 && id < id_voter, "Invalid Voter Id");
+        }
+        _;
+    }
     
 
     event voter_registration(address , string);
@@ -138,12 +156,13 @@ contract Voting{
         voterIdManager[msg.sender] = Voter_Id_Manager(id_voter);
         voterEligible[id_voter] = Voter_Eligible (false);
         is_voted[msg.sender].voted = false;
+        votersList.push(voters[id_voter]);
         id_voter++;
         emit voter_registration(msg.sender, registration_message);
         emit Request_For_Registration(election_commission, "Request for Voter Registration");
     }
 
-    function approve_or_unBan_voter(uint _voter_id) public onlyElectionCommission{
+    function approve_or_unBan_voter(uint _voter_id) public onlyElectionCommission validId(_voter_id, false){
         if(!voterEligible[_voter_id].voter_eligible){
             voterEligible[_voter_id].voter_eligible = true;
             total_active_voters++;
@@ -153,7 +172,7 @@ contract Voting{
         }
     }
 
-    function reject_or_ban_voter(uint _voter_id) public onlyElectionCommission{
+    function reject_or_ban_voter(uint _voter_id) public onlyElectionCommission validId(_voter_id, false){
         if(voterEligible[_voter_id].voter_eligible){
             voterEligible[_voter_id].voter_eligible = false;
             total_active_voters--;
@@ -174,7 +193,7 @@ contract Voting{
         emit Request_For_Registration(election_commission, "Request for Candidate Registration");
     }
 
-    function approve_or_unBan_candidate(uint _candidate_id) public onlyElectionCommission {
+    function approve_or_unBan_candidate(uint _candidate_id) public onlyElectionCommission validId(_candidate_id, true){
         if(!candidateEligible[_candidate_id].candiate_eligible){
             candidateEligible[_candidate_id].candiate_eligible = true;
             active_candidates++;
@@ -184,7 +203,7 @@ contract Voting{
         }
     }
 
-    function reject_or_ban_candidate(uint _candidate_id) public onlyElectionCommission{
+    function reject_or_ban_candidate(uint _candidate_id) public onlyElectionCommission validId(_candidate_id, true){
         if(candidateEligible[_candidate_id].candiate_eligible){
             candidateEligible[_candidate_id].candiate_eligible = false;
             active_candidates--;
@@ -204,16 +223,14 @@ contract Voting{
     }
 
     function endElection() public onlyElectionCommission{
-        if(election_started){
-            if(!election_ended){
-                election_ended = true;
-            }
+        if(election_started && !election_ended){
+            election_ended = true;
         }else{
             revert("The election is not started yet.");
         }
     }
 
-    function delegate_my_vote(uint _voter_id, DelegatedRelationship _relationship) public delegateMyVote(_voter_id) {
+    function delegate_my_vote(uint _voter_id, DelegatedRelationship _relationship) public delegateMyVote(_voter_id) validId(_voter_id, false) {
         delegatedVotes[_voter_id].push( Delegated_Votes(voterIdManager[msg.sender].id, _relationship, true) );
         is_voted[msg.sender].voted = true;
     }
@@ -222,19 +239,22 @@ contract Voting{
         require(voterEligible[voterIdManager[msg.sender].id].voter_eligible, "You are not authorized to vote. Please contact Election Commission");
         results[_candidate_id].vote_count++;
         total_votes++;
+        vote_list[voterIdManager[msg.sender].id] = Vote_List(_candidate_id);
         is_voted[msg.sender].voted = true;
     }
 
-    function register_delegated_vote(uint _delegated_voter_id, uint _candidate_id) public election_in_progress{
+    function register_delegated_vote(uint _delegated_voter_id, uint _candidate_id) public election_in_progress validId(_candidate_id, true) validId(_delegated_voter_id, false){
        require(candidateEligible[_candidate_id].candiate_eligible, "The candidate is not eligible.");
         bool voted = false;
         for(uint i = 0; i < delegatedVotes[voterIdManager[msg.sender].id].length; i++){
-            if(delegatedVotes[voterIdManager[msg.sender].id][i].delegated_voter_id == _delegated_voter_id){
-                results[_candidate_id].vote_count++;
-                total_votes++;
-                delegatedVotes[voterIdManager[msg.sender].id][i].can_vote = false;
-                voted = true;
-                break;
+            if((delegatedVotes[voterIdManager[msg.sender].id][i].delegated_voter_id == _delegated_voter_id) && 
+                (delegatedVotes[voterIdManager[msg.sender].id][i].can_vote == true)){
+                    results[_candidate_id].vote_count++;
+                    total_votes++;
+                    delegatedVotes[voterIdManager[msg.sender].id][i].can_vote = false;
+                    voted = true;
+                    vote_list[_delegated_voter_id] = Vote_List(_candidate_id);
+                    break;
             }
         }
         if(!voted){
@@ -242,11 +262,11 @@ contract Voting{
         }
     }
 
-    function get_voter_detail(uint _voter_id) public view returns (Voters_List memory){
+    function get_voter_detail(uint _voter_id) public view validId(_voter_id, false) returns (Voters_List memory){
         return voters[_voter_id];
     }
 
-    function get_candidate_detail(uint _candidate_id) public view returns (Candidate_List memory){
+    function get_candidate_detail(uint _candidate_id) public view validId(_candidate_id, true) returns (Candidate_List memory){
         return candidate[_candidate_id];
     }
 
@@ -254,36 +274,50 @@ contract Voting{
         return candidateList;
     }
 
+    function get_voters_list() public view onlyElectionCommission returns (Voters_List[] memory){
+        return votersList;
+    }
+
     function get_election_result() public view returns (string memory, uint, uint){
         require(election_ended, "You cannot view the results at the moment.");
+
         uint max_vote = results[1].vote_count;
         uint tie_id = 0;
-        uint  winner = candidate[1].candidate_id;
+        uint winner = candidate[1].candidate_id;
+        string memory winner_name = candidate[1].candidate_name;
+
         for(uint i = 2; i <= active_candidates; i++){
-            if(results[i].vote_count > max_vote){
+            if(results[i].vote_count > max_vote) {
                 max_vote = results[i].vote_count;
                 winner = candidate[i].candidate_id;
-            }else if(results[i].vote_count == max_vote){
+                winner_name = candidate[i].candidate_name;
+                tie_id = 0;
+            }else if(results[i].vote_count == max_vote) {
                 tie_id = i;
             }
         }
-        if(tie_id == 0){
-            return(string(abi.encodePacked("The winner is ", candidateList[winner].candidate_name)), winner, max_vote);
-        }else{
-            return ("The result is Tie Between" ,winner,  tie_id);
+
+        if(tie_id == 0) {
+            return (string(abi.encodePacked("The winner is ", winner_name)), winner, max_vote);
+        } else {
+            return ("The result is Tie Between", winner, tie_id);
         }
     }
 
-    function get_candidate_result(uint _candidate_id) public view returns (uint){
+    function show_my_vote() public view returns(uint){
+        return(vote_list[voterIdManager[msg.sender].id].voted_id);
+    }
+
+    function get_candidate_result(uint _candidate_id) public view validId(_candidate_id, true) returns (uint){
         require(election_ended, "You cannot view the results at the moment.");
         return results[_candidate_id].vote_count;
     }
 
-    function get_voter_eligibility(uint _voter_id) public view returns(bool){
+    function get_voter_eligibility(uint _voter_id) public view validId(_voter_id, false) returns(bool){
         return voterEligible[_voter_id].voter_eligible;
     }
 
-    function get_candidate_eligibility(uint _candidate_id) public view returns(bool){
+    function get_candidate_eligibility(uint _candidate_id) public view validId(_candidate_id, true) returns(bool){
         return candidateEligible[_candidate_id].candiate_eligible;
     }
 }

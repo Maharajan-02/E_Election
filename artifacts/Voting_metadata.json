@@ -385,6 +385,46 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "get_voters_list",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "voter_id",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "voter_name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "voter_address",
+								"type": "string"
+							},
+							{
+								"internalType": "uint8",
+								"name": "voter_age",
+								"type": "uint8"
+							},
+							{
+								"internalType": "string",
+								"name": "voter_aadhaar_number",
+								"type": "string"
+							}
+						],
+						"internalType": "struct Voting.Voters_List[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -471,6 +511,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "show_my_vote",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "startElection",
 				"outputs": [],
 				"stateMutability": "nonpayable",
@@ -504,12 +557,20 @@
 		"remappings": []
 	},
 	"sources": {
+		"@openzeppelin/contracts/utils/math/SafeMath.sol": {
+			"keccak256": "0x58b21219689909c4f8339af00813760337f7e2e7f169a97fe49e2896dcfb3b9a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ef8e012e946dec20e59f2d4446f4b44bb098f3fa8bac103b1b5112fff777447b",
+				"dweb:/ipfs/QmVTooKWcLkJ9W68yNX4MgdrbAKiAXwuRN9A7f4NkdcdtQ"
+			]
+		},
 		"BlockChainElection.sol": {
-			"keccak256": "0xbd68f1fb27903e163674d9adc651e4684c291469024437e41d5d81038b3e7e32",
+			"keccak256": "0x7d1d2b66e653b63f0a1d3e6bf7470e80501c30cc5fcd013d98c52c6f923808a6",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://6b7e7e6849cf98d4be3bc193cf4a8e50902d73f01cba674f0746c7f02a65c829",
-				"dweb:/ipfs/QmNh1uJcWcmnLBAUBTjHqnPm7gDzhFTP6BNBGYVdxiAD89"
+				"bzz-raw://09896674f0ba37172bceb2efd0486c2c65b9686a7b737874c6a32b8aa9554dda",
+				"dweb:/ipfs/QmNuLx5pqUUZYGwJXLgfnmSvtReukJfXHFAyfY6nADCSDB"
 			]
 		}
 	},
